@@ -16,16 +16,21 @@ jobs:
         run: |
           curl -L https://raw.githubusercontent.com/mayaxcn/china-ip-list/master/chn_ip.txt -o chn_ip.txt
 
+      - name: Download chn_ip_v6.txt
+        run: |
+          curl -L https://raw.githubusercontent.com/mayaxcn/china-ip-list/master/chn_ip_v6.txt -o chn_ip_v6.txt
+
       - name: Convert to Loon format
         run: |
           python3 convert_ip.py
-          cat chn_ip_loon.txt # 调试输出
+          cat chn_ip_loon.txt # 调试 IPv4 输出
+          cat chn_ip_loon_v6.txt # 调试 IPv6 输出
 
       - name: Commit and push changes
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add chn_ip_loon.txt
-          git commit -m "Update chn_ip_loon.txt" || echo "No changes to commit"
+          git add chn_ip_loon.txt chn_ip_loon_v6.txt
+          git commit -m "Update chn_ip_loon.txt and chn_ip_loon_v6.txt" || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/alexcz-a11y/loon-china-ip-rules.git
           git push
